@@ -10,6 +10,7 @@
 <body>
 <!-- begin of script php -->
 <?php
+    $err="";
     if(array_key_exists('textArea', $_POST)){
         $res = $_POST['textArea'];
         $lastValue = "rien";
@@ -54,10 +55,16 @@
         if($res == ""){
             eval("\$res = '';");
         }else{
-            try {
-                eval("\$res = $res;");
-            } catch (ParseError $th) {
-                $error ='<div class ="erreur">Erreur syntaxe </div>';
+            $p = substr($res, -2);
+
+            if($p == "/0"){
+                $err = "cannot divide by zero";
+            } else {
+                try {
+                    eval("\$res = $res;");
+                } catch (ParseError $th) {
+                    $error ='<div class ="erreur">Erreur syntaxe </div>';
+                }
             }
         } 
 
@@ -105,6 +112,9 @@
                 <input type="submit" name="clavier"  class="clavier" value="."/>
                 <input type="submit" name="reset"   class="clavier reset" value="CE"/>
                 <input type="submit" name="result"  class="clavier result" value="="/>
+                <?php if(!empty($err)) { ?>
+                    <small style="color:tomato;font-size:16px"><?php echo $err ?></small>
+                <?php }  ?>
             </div>
             <?php 
                 if (isset($error)){
@@ -117,8 +127,6 @@
     <!-- end of div calculatrice -->
 </div>
 <!-- end of div container -->
-
-
 
 </body>
 </html>

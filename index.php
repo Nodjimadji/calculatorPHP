@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./styles/styles.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+    <link href="./styles/styles.css" rel="stylesheet"> 
+    <!-- title of page   -->
     <title>Calculatrice</title>
 </head>
 <body>
     <!-- PHP code beginning -->
     <?php
+        $err = "";
         if(array_key_exists('textArea', $_POST)){
           $resp = $_POST['textArea'];
         }
@@ -25,13 +26,24 @@
         if(array_key_exists('reset',$_POST)){
             $resp = "";
         }
-        /**Display the result of operation */
+        /**For result operation */
         if(array_key_exists('result',$_POST)){
             if($resp == ""){
                 /**if resp is empty */
                 eval("\$resp = '';");
             }else{
-                eval("\$resp = $resp;");
+                $p = substr($resp, -2);
+
+                if ($p == "/0"){
+                    $err = "Unable to divide by zero";
+                } else {
+                    try{
+                        eval("\$resp = $resp;");
+                    }catch(Exception $e){
+                        echo 'Exception reçue : ', $e->getMessage(), "\n";
+                    }
+                }
+               
             }
         }
     ?>
@@ -39,10 +51,13 @@
     <div id="container">
         <h1> Calculatrice </h1>
         <div id="calculatrice">
+            <!-- Begin of form -->
             <form method="post" >
                 <div id="header">
                     <input type="text" name="textArea" class="textArea" value="<?php echo $resp ?>" readonly/>
                 </div>
+                <!-- Redirection -> scientifique mode -->
+                <a class="clavier reset" href="./scientifique/scientifique">scien.</a>
                         <!-- key create -->
                 <div id="body">
                     <input type="submit" name="clavier" class="clavier" value="7"/>
@@ -62,11 +77,18 @@
                     <input type="submit" name="result"  class="clavier" value="="/>
                     <input type="submit" name="clavier" class="clavier" value="/"/>
                     <input type="submit" name="clavier" class="clavier" value="%"/>
+                    <?php if(!empty($err)) { ?>
+                    <small style="color:tomato;font-size:16px"><?php echo $err ?></small>
+                   <?php }  ?>
+
                 </div>
 
             </form>
+            <!-- end of form -->
         </div>
+        <!-- end of div calculatrice -->
     </div>
+    <!-- end of div container -->
 
 
     
