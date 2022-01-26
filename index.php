@@ -39,6 +39,7 @@
                 } else {
                     try{
                         eval("\$resp = $resp;");
+                    include './bdd/connect.php';
                     }catch(Exception $e){
                         echo 'Exception reçue : ', $e->getMessage(), "\n";
                     }
@@ -52,10 +53,11 @@
         <h1> Calculatrice </h1>
         <div id="calculatrice">
             <!-- Begin of form -->
-            <form method="post" >
+            <form method="post" action="" >
                 <div id="header">
                     <input type="text" name="textArea" class="textArea" value="<?php echo $resp ?>" readonly/>
                 </div>
+
                 <!-- Redirection -> scientifique mode -->
                 <a class="clavier reset" href="./scientifique/scientifique">scien.</a>
                         <!-- key create -->
@@ -76,6 +78,8 @@
                     <input type="submit" name="reset"   class="clavier reset" value="CE"/>
                     <input type="submit" name="result"  class="clavier" value="="/>
                     <input type="submit" name="clavier" class="clavier" value="/"/>
+
+                    <a type="submit" name="clavier" class="clavier reset" href='./bdd/display.class.php' >ANS</a>
                     <input type="submit" name="clavier" class="clavier" value="%"/>
                     <?php if(!empty($err)) { ?>
                     <small style="color:tomato;font-size:16px"><?php echo $err ?></small>
@@ -89,8 +93,6 @@
         <!-- end of div calculatrice -->
     </div>
     <!-- end of div container -->
-
-
     
 </body>
 </html>
